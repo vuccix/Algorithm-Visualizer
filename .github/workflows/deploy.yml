@@ -44,6 +44,8 @@ jobs:
           cp build/AlgoVisualizer_wasm.js public/
           cp build/AlgoVisualizer_wasm.wasm public/
           cp index.html public/index.html
+          cp styles.css public/styles.css
+          cp script.js public/script.js
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
