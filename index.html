@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithm Visualizer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>WebP Algorithm Visualizer</h1>
+
+    <!-- controls -->
+    <div class="controls">
+        <div class="form-group">
+            <label for="fileInput">Select Image</label>
+            <input type="file" id="fileInput" accept="image/*">
+        </div>
+
+        <div class="form-group">
+            <label for="algoSelect">Algorithm</label>
+            <select id="algoSelect">
+                <option value=BUBBLE_SORT">  Bubble Sort    </option>
+                <option value=COMB_SORT">    Comb   Sort    </option>
+                <option value=INSERT_SORT">  Insert Sort    </option>
+                <option value=SELECT_SORT">  Select Sort    </option>
+                <option value=SHAKER_SORT">  Shaker Sort    </option>
+                <option value=QUICK_SORT">   Quick  Sort    </option>
+                <option value=MERGE_SORT">   Merge  Sort    </option>
+                <option value=HEAP_SORT">    Heap   Sort    </option>
+                <option value=SEAM_CARVING"> Seam   Carving </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="rowHeight">Row Height</label>
+            <input type="number" id="rowHeight" value="1" min="1">
+        </div>
+
+        <div class="form-group">
+            <label for="delay">Frame Delay (ms)</label>
+            <input type="number" id="delay" value="50" min="10" step="10">
+        </div>
+
+        <div class="form-group">
+            <label for="quality">Quality (<span id="qualityVal">100</span>)</label>
+            <input type="range" id="quality" value="100" min="1" max="100">
+        </div>
+
+        <div class="form-group checkbox-group">
+            <input type="checkbox" id="reverse">
+            <label for="reverse">Reverse Animation</label>
+        </div>
+
+        <button id="processBtn" disabled>Loading WASM...</button>
+    </div>
+
+    <!-- output -->
+    <div class="output">
+        <div class="spinner" id="spinner"></div>
+        <p class="status" id="statusText">Awaiting image...</p>
+        <img id="resultImg" alt="Generated WebP Animation">
+        <a id="downloadBtn" download="animated.webp" tag="button">
+            <button>Download WebP</button>
+        </a>
+    </div>
+</div>
+
+<script src="AlgoVisualizer_wasm.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
