@@ -1,6 +1,6 @@
+#include <Image.h>
 #include <emscripten/bind.h>
 #include <emscripten/val.h>
-#include "Image.h"
 
 using namespace emscripten;
 
@@ -18,23 +18,22 @@ val generateWebPToJS(Image& img) {
     return js_array;
 }
 
-EMSCRIPTEN_BINDINGS(my_module) {
+EMSCRIPTEN_BINDINGS(myModule) {
     enum_<ALGORITHM>("ALGORITHM")
-        .value("BUBBLE_SORT",  ALGORITHM::BUBBLE_SORT)
-        .value("COMB_SORT",    ALGORITHM::COMB_SORT)
-        .value("INSERT_SORT",  ALGORITHM::INSERT_SORT)
-        .value("SELECT_SORT",  ALGORITHM::SELECT_SORT)
-        .value("SHAKER_SORT",  ALGORITHM::SHAKER_SORT)
-        .value("QUICK_SORT",   ALGORITHM::QUICK_SORT)
-        .value("MERGE_SORT",   ALGORITHM::MERGE_SORT)
-        .value("HEAP_SORT",    ALGORITHM::HEAP_SORT)
-        .value("SEAM_CARVING", ALGORITHM::SEAM_CARVING)
-        ;
+        .value("BUBBLE_SORT",      ALGORITHM::BUBBLE_SORT)
+        .value("COMB_SORT",        ALGORITHM::COMB_SORT)
+        .value("INSERT_SORT",      ALGORITHM::INSERT_SORT)
+        .value("SELECT_SORT",      ALGORITHM::SELECT_SORT)
+        .value("SHAKER_SORT",      ALGORITHM::SHAKER_SORT)
+        .value("QUICK_SORT",       ALGORITHM::QUICK_SORT)
+        .value("MERGE_SORT",       ALGORITHM::MERGE_SORT)
+        .value("HEAP_SORT",        ALGORITHM::HEAP_SORT)
+        .value("SEAM_CARVING",     ALGORITHM::SEAM_CARVING);
 
     class_<Image>("Image")
-        .function("setParams", &Image::setParams)
+        .function("setParams",     &Image::setParams)
         .function("getFrameCount", &Image::getFrameCount)
-        .function("generateWebP", &generateWebPToJS); 
+        .function("generateWebP",  &generateWebPToJS);
 
     function("createImage", &createImageFromJS, allow_raw_pointers());
 }

@@ -154,3 +154,10 @@ button:disabled {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+.warning-box {
+    display: none;
+    color: #d9534f;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}

@@ -23,8 +23,7 @@ private: // internals
 
     int32_t              m_width     = 0,
                          m_height    = 0,
-                         m_channels  = 4,
-                         m_frame     = 0;
+                         m_channels  = 4;
 
 private: // parameters
     int32_t              m_delay_ms  = 50,
