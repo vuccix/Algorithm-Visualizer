@@ -24,19 +24,26 @@ function checkPerformanceWarning() {
     const rowHeight  = parseInt(rowHeightInput.value) || 1;
     const isSlowAlgo = ['BUBBLE_SORT', 'INSERT_SORT', 'COMB_SORT', 'SHAKER_SORT'].includes(algo);
 
+    let message      = '';
+    let showWarning  = false;
+
     if (isSlowAlgo && curImgHeight > 256 && rowHeight < 4) {
-        warningBox.style.display = 'block';
-        warningBox.textContent   = "Warning: Visualization generation is slow for "
-                                 + "images taller than 256px. Consider picking "
-                                 + "a smaller image or increasing row height above 4."
+        showWarning  = true;
+        message      = "Warning: Visualization generation is slow for images taller than 256px. "
+                     + "Consider picking a smaller image or increasing row height above 4.";
     }
     else if (algo === "SEAM_CARVING" && curImgWidth > 512) {
-        warningBox.style.display = 'block';
-        warningBox.textContent   = "Warning: Visualization generation is slow for "
-                                 + "images wider than 512px. Consider picking a smaller image."
+        showWarning  = true;
+        message      = "Warning: Visualization generation is slow for images wider than 512px. "
+                     + "Consider picking a smaller image.";
+    }
+
+    if (showWarning && curImgWidth !== 0 && curImgHeight !== 0) {
+        warningBox.textContent = message;
+        warningBox.classList.remove('hidden');
     }
     else
-        warningBox.style.display = 'none';
+        warningBox.classList.add('hidden');
 }
 
 fileInput.addEventListener('change', (e) => {

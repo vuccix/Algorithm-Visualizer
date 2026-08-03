@@ -156,8 +156,12 @@ button:disabled {
 }
 
 .warning-box {
-    display: none;
+    display: block;
     color: #d9534f;
     font-size: 0.9rem;
     margin-bottom: 10px;
+}
+
+.warning-box.hidden {
+    display: none !important;
 }
