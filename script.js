@@ -1,5 +1,6 @@
 let api              = null;
 let curImgHeight     = 0;
+let curImgWidth      = 0;
 
 const processBtn     = document.getElementById('processBtn');
 const fileInput      = document.getElementById('fileInput');
@@ -23,8 +24,17 @@ function checkPerformanceWarning() {
     const rowHeight  = parseInt(rowHeightInput.value) || 1;
     const isSlowAlgo = ['BUBBLE_SORT', 'INSERT_SORT', 'COMB_SORT', 'SHAKER_SORT'].includes(algo);
 
-    if (isSlowAlgo && curImgHeight > 256 && rowHeight < 4)
+    if (isSlowAlgo && curImgHeight > 256 && rowHeight < 4) {
         warningBox.style.display = 'block';
+        warningBox.textContent   = "Warning: Visualization generation is slow for "
+                                 + "images taller than 256px. Consider picking "
+                                 + "a smaller image or increasing row height above 4."
+    }
+    else if (algo === "SEAM_CARVING" && curImgWidth > 512) {
+        warningBox.style.display = 'block';
+        warningBox.textContent   = "Warning: Visualization generation is slow for "
+                                 + "images wider than 512px. Consider picking a smaller image."
+    }
     else
         warningBox.style.display = 'none';
 }
@@ -37,7 +47,8 @@ fileInput.addEventListener('change', (e) => {
     reader.onload  = (event) => {
         const img  = new Image();
         img.onload = () => {
-            curImgHeight         = img.height;
+            curImgHeight               = img.height;
+            curImgWidth                = img.width;
             rowHeightInput.max         = curImgHeight;
             maxHeightLabel.textContent = `max: ${curImgHeight}`;
 
