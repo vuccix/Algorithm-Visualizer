@@ -33,6 +33,6 @@ else()
     #add_link_options(-fopenmp)
     #find_package(OpenMP REQUIRED)
 
-    add_executable(AlgoVisualizer main.cpp)
+    add_executable(AlgoVisualizer src/main.cpp)
     target_link_libraries(AlgoVisualizer PRIVATE Image)
 endif()
