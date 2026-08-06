@@ -63,6 +63,8 @@ std::vector<uint8_t> Image::generateWebP() {
     return result;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void Image::setParams(const ALGORITHM algo, const int32_t rowHeight,
                       const int32_t delay_ms, const float quality, const bool reverse) noexcept {
     m_algorithm = algo;
@@ -97,6 +99,7 @@ void* Image::process() {
     config.filter_sharpness = 0;
     config.exact            = 1;
     config.near_lossless    = 100;
+    config.method           = 2;
 
     WebPPicture pic;
     if (!WebPPictureInit(&pic)) {
@@ -227,7 +230,9 @@ void Image::writeCarve(const std::function<void(const Pixel*, int32_t, int32_t)>
             const int32_t seam_x = seam[y];
             Pixel* row           = &frameBuffer[y * m_width];
 
-            std::copy(row + seam_x + 1, row + widthImg, row + seam_x);
+            std::memmove(row + seam_x,
+                         row + seam_x + 1,
+                         (widthImg - seam_x - 1) * sizeof(Pixel));
             row[widthImg - 1] = Pixel{ 0, 0, 0, 0 };
         }
 

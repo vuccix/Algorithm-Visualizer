@@ -66,14 +66,10 @@ struct ImageSize {
 };
 
 float computeLocalEnergy(const std::span<const Pixel> image, const int32_t x, const int32_t y, const ImageSize size) {
-    auto getLuminance = [](const Pixel p) -> float {
-        return 0.2989f * p.r + 0.5870f * p.g + 0.1140f * p.b;
-    };
-
     auto getL = [&](int32_t sampleX, int32_t sampleY) -> float {
         sampleX = std::clamp(sampleX, 0, size.width - 1);
         sampleY = std::clamp(sampleY, 0, size.height - 1);
-        return getLuminance(image[sampleY * size.stride + sampleX]);
+        return image[sampleY * size.stride + sampleX].r;
     };
 
     const float gx = -1 * getL(x - 1, y - 1) + 1 * getL(x + 1, y - 1) +
@@ -94,34 +90,32 @@ void getCumulative(std::span<float> cumulativeData, std::span<const float> energ
 
     std::copy_n(energyData.begin(), cols, cumulativeData.begin());
 
-    const std::mdspan cumulative(cumulativeData.data(), rows, stride);
-    const std::mdspan energy(energyData.data(), rows, stride);
-
     for (int32_t y = 1; y < rows; ++y) {
+        const float* prevRow = &cumulativeData[(y - 1) * stride];
+        float*       curRow  = &cumulativeData[y * stride];
+        const float* eRow    = &energyData[y * stride];
+
         // left boundary (x = 0)
         {
-            const float c    =            cumulative[y - 1, 0];
-            const float r    = cols > 1 ? cumulative[y - 1, 1] : ::INF;
-
-            cumulative[y, 0] = energy[y, 0] + std::min(c, r);
+            const float c =            prevRow[0] ;
+            const float r = cols > 1 ? prevRow[1] : ::INF;
+            curRow[0]     =            eRow[0]    + std::min(c, r);
         }
 
         // middle
         for (int32_t x = 1; x < cols - 1; ++x) {
-            const float l    = cumulative[y - 1, x - 1];
-            const float c    = cumulative[y - 1, x];
-            const float r    = cumulative[y - 1, x + 1];
-
-            cumulative[y, x] = energy[y, x] + std::min({ l, c, r });
+            const float l = prevRow[x - 1];
+            const float c = prevRow[x + 0];
+            const float r = prevRow[x + 1];
+            curRow[x]     = eRow[x] + std::min(l, std::min(c, r));
         }
 
         // right boundary (x = cols - 1)
         if (cols > 1) {
-            const int32_t x  = cols - 1;
-            const float   l  = cumulative[y - 1, x - 1];
-            const float   c  = cumulative[y - 1, x];
-
-            cumulative[y, x] = energy[y, x] + std::min(l, c);
+            const int32_t x = cols - 1;
+            const float   l = prevRow[x - 1];
+            const float   c = prevRow[x + 0];
+            curRow[x]       = eRow[x] + std::min(l, c);
         }
     }
 }
